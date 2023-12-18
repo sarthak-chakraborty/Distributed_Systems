@@ -1,0 +1,11 @@
+NODES = [(1, "fa23-cs425-3701.cs.illinois.edu"), 
+        (2, "fa23-cs425-3702.cs.illinois.edu"),
+        (3, "fa23-cs425-3703.cs.illinois.edu"), 
+        (4, "fa23-cs425-3704.cs.illinois.edu"),
+        (5, "fa23-cs425-3705.cs.illinois.edu"),
+        (6, "fa23-cs425-3706.cs.illinois.edu"),
+        (7, "fa23-cs425-3707.cs.illinois.edu"),
+        (8, "fa23-cs425-3708.cs.illinois.edu"),
+        (9, "fa23-cs425-3709.cs.illinois.edu"),
+        (10, "fa23-cs425-3710.cs.illinois.edu"),
+        ]

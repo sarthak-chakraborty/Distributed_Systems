@@ -1,0 +1,42 @@
+put data.csv data.csv
+put filter_maple.py maple.py
+put filter_juice.py juice.py
+
+maple maple.py 4 prefix ["data.csv"]
+juice juice.py 2 prefix dest.txt 0
+
+sql "select * from data where name = doe" maple.py juice.py 2 2 prefix ['data.csv'] dest.txt 1
+
+sql "select * from data where name = adam" maple.py juice.py 2 2 prefix ['data.csv'] dest.txt 1
+
+
+Demo 1:
+put traffic.csv traffic.csv
+put demo_maple1.py maple1.py
+put demo_maple2.py maple2.py
+put demo_juice1.py juice1.py
+put demo_juice2.py juice2.py
+
+demo1 maple1.py juice1.py maple2.py juice2.py 2 2 prefix ['traffic.csv'] dest1.txt "where Interconne = Radio"
+demo1 maple1.py juice1.py maple2.py juice2.py 5 5 prefix ['traffic.csv'] dest1.txt "where Interconne = Fiber"
+
+
+Demo 2:
+put traffic.csv traffic.csv
+put filter_maple.py maple.py
+put filter_juice.py juice.py
+
+sql "select * from data where Interconne = ^Radio$" maple.py juice.py 1 1 filterprefix ['traffic.csv'] dest2.txt 1
+
+sql "select * from data where Interconne = ^Radio$" maple.py juice.py 2 2 filterprefix ['traffic.csv'] dest2.txt 1
+sql "select * from data where Interconne = ^Fiber_Radio$" maple.py juice.py 5 5 filterprefix ['traffic.csv'] dest2.txt 1
+sql "select * from data where Interconne = ^.*Radio$" maple.py juice.py 5 5 filterprefix ['traffic.csv'] dest2.txt 1
+sql "select * from data where Detection_ = ^Video$ and Interconne = ^.*Radio$" maple.py juice.py 5 5 filterprefix ['traffic.csv'] dest2.txt 1
+
+
+Report Join:
+put traffic_1.csv traffic.csv
+put join_maple.py maple.py
+put join_juice.py juice.py
+
+sql "select * from data where D1.Interconne = D2.Detection_" maple.py juice.py 5 5 prefix ['traffic.csv'] dest.txt 1    

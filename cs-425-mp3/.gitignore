@@ -1,0 +1,6 @@
+__pycache__/
+*.log
+*.txt
+DS/
+wikipedia/
+raw.en.tgz
