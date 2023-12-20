@@ -96,6 +96,13 @@ class Failure_Detector:
                                                 )
             # If the host is in the current machine's membership list, update it                                    
             else:
+                # Add failed node to failed_nodes list if failure is detected through gossip (not by machine itself)
+                if msg_membership_list.cleanup_status_dict[host] is not None and \
+                    msg_membership_list.cleanup_status_dict[host]["flag"] == 1:
+                    if self.machine.membership_list.cleanup_status_dict[host]["flag"] == 0:
+                            print(f'[Gossip] Adding {host} to Failed Nodes')
+                            self.machine.membership_list.failed_nodes.append(host)
+
                 if self.ENABLE_SUSPICION:
                     self.machine.membership_list.update_member_with_suspicion(host, 
                                                                         msg_membership_list.active_nodes[host].membership_counter, 
@@ -103,14 +110,7 @@ class Failure_Detector:
                                                                         msg_membership_list.cleanup_status_dict[host],
                                                                         self.machine.logger
                                                                         )
-                else:
-                    # Add failed node to failed_nodes list if failure is detected through gossip (not by machine itself)
-                    if msg_membership_list.cleanup_status_dict[host] is not None and \
-                        msg_membership_list.cleanup_status_dict[host]["flag"] == 1:
-                        if self.machine.membership_list.cleanup_status_dict[host]["flag"] == 0:
-                                print(f'[Gossip] Adding {host} to Failed Nodes')
-                                self.machine.membership_list.failed_nodes.append(host)
-                                
+                else:          
                     self.machine.membership_list.update_member(host, 
                                                         msg_membership_list.active_nodes[host].membership_counter,
                                                         msg_membership_list.cleanup_status_dict[host],
