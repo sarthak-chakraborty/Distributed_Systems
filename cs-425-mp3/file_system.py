@@ -189,7 +189,10 @@ class File_System:
                                 file = mssg.kwargs['replica']
                                 if file in self.machine.membership_list.file_replication_dict:
                                     self.machine.membership_list.file_replication_dict[file].remove(mssg.host)
-                                
+                                    # Removing from file replication dict is there is no replica for the file
+                                    if len(self.machine.membership_list.file_replication_dict[file]) == 0:
+                                        self.machine.membership_list.file_replication_dict.pop(file)
+                                        self.machine.membership_list.write_lock_set.remove(file)
                                 # if len(self.machine.membership_list.file_replication_dict[file]) == 0: # TODO: should the key even exist?
                                 #     self.machine.membership_list.write_lock_set.remove(file)
 
@@ -585,18 +588,15 @@ class File_System:
             while True:
                 if (sdfs_filename not in self.machine.membership_list.write_lock_set) and \
                     (self.machine.membership_list.read_lock_dict[sdfs_filename] == 0):
-                    print("Leader work")
                     self.machine.membership_list.write_lock_set.add(sdfs_filename)
                     self.machine.logger.info(f"[Write] File Lock Set: {self.machine.membership_list.write_lock_set}")
 
                     if sdfs_filename not in self.machine.membership_list.file_replication_dict:
-                        print("Leader work2")
                         # Choose Replication Servers if file is present
                         servers = self.machine.membership_list.active_nodes.keys()
                         replica_servers = random.sample(servers, self.machine.REPLICATION_FACTOR)
                         replica_servers = [(server[0], server[1] - BASE_PORT + BASE_WRITE_PORT, server[2], server[3]) for server in replica_servers]
                     else:
-                        print("Leader work3")
                         replica_servers = self.machine.membership_list.file_replication_dict[sdfs_filename]
                         replica_servers = [(server[0], server[1] - BASE_PORT + BASE_WRITE_PORT, server[2], server[3]) for server in replica_servers]
 
